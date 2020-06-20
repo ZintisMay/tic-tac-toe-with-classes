@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+	<button id="createGame">createGame</button>
+	<div id="target"></div>
+	<script type="text/javascript" src="./TTTClass.js"></script>
+	<script type="text/javascript">
+		var games = []
+		document.getElementById("createGame").addEventListener('click',function(){
+			let g = new TicTacToeGame(document.getElementById("target"))
+			games.push(g)
+			console.log(games)
+		})
+	</script>
+
+</body>
+</html>
