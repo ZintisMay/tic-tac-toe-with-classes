@@ -1,25 +1,42 @@
 class TicTacToeGame {
 
-    constructor(targetDiv, size) {
+    constructor(targetDiv) {
+
+    		//Store the area you are appending to
         this.targetDiv = targetDiv
-        this.size = size
+        //Create the board data structure
+        //IMPORTANT X's and O's are stored as 1 and -1. Makes it easy to determine if there is a run
         this.board = [
             [0, 0, 0],
             [0, 0, 0],
             [0, 0, 0]
         ]
+        //Start a player,count the moves
         this.playerTurn = "X"
-        this.gameArea = null
         this.moves = 0
-        this.createGameArea()
+
+        //Create the element to contain the game
+        let gameArea = document.createElement("div")
+        gameArea.classList.add("TTTArea")
+        targetDiv.append(gameArea)
+        //Store that element to draw to again later
+        this.gameArea = gameArea
+
+        this.drawBoard()
+
+        this.addClickListenerToBoard()
+
+        this.me = this
     }
 
-    addClickListenerToGameArea() {
+    addClickListenerToBoard() {
         this.gameArea.addEventListener('click', (event) => {
+        		//Each cell in the board has an X and Y data property. Recall those to figure out which has been clicked
             let t = event.target
             let x = t.dataset.x
             let y = t.dataset.y
             console.log(x, y)
+            //Make sure that area of the board model doesn't have a value
             if (this.board[x][y] == 0) {
                 this.board[x][y] = this.playerMove()
                 console.log(this.board)
@@ -75,23 +92,17 @@ class TicTacToeGame {
     }
 
     playerMove() {
-        let storeVal = this.playerTurn == "X" ? 1 : -1;
+        let currentMove = this.playerTurn == "X" ? 1 : -1;
         this.playerTurn = this.playerTurn == "X" ? "O" : "X";
-        return storeVal
-    }
-
-    createGameArea() {
-        let gameArea = document.createElement("div")
-        gameArea.classList.add("TTTArea")
-        this.targetDiv.append(gameArea)
-        this.gameArea = gameArea
-        this.drawBoard()
-        this.addClickListenerToGameArea()
+        return currentMove
     }
 
     drawBoard() {
 
+    		//Clear game area
         this.gameArea.innerHTML = ""
+
+        //This is iterating both rows and columns of the 2d array
         this.board.map((row, i) => {
 
             let gameRow = document.createElement("div")
@@ -100,15 +111,16 @@ class TicTacToeGame {
             row.map((col, ii) => {
                 gameRow.innerHTML += this.createCell(i, ii, this.board[i][ii])
             })
+
             this.gameArea.append(gameRow)
         })
 
     }
 
     end() {
-        console.log(this)
         //Clears the DOM
         this.gameArea.remove()
+        //Can't find a good way to ensure it gets garbage collected upon completion
         for(var key in this){
         	delete this[key]
         }
